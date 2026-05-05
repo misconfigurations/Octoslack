@@ -1,0 +1,63 @@
+[build-system]
+requires = [
+    "setuptools>=68",
+]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "Octoslack"
+version = "2.2.1"
+description = "Slack integration plugin for Octoprint"
+authors = [
+    { name = "Chris Fraschetti", email = "fraschetti.dev@gmail.com" },
+]
+maintainers = [
+    { name = "Šárka Hawke", email = "sarka@boobs.institute" },
+]
+requires-python = ">=3.7,<4"
+dependencies = [
+    "tinys3",
+    "imgurpython",
+    "netifaces",
+    "sarge",
+    "pytz",
+    "pushbullet.py",
+    "pathlib2",
+    "pushover_complete",
+    "rocket-python",
+    "matrix_client",
+    "discord-webhook",
+    "pymsteams",
+    "six>=1.9.0",
+    "slack_sdk>3.0.0",
+    "minio",
+    "Pillow",
+    "humanize",
+]
+dynamic = [
+    "license",
+]
+
+[project.entry-points."octoprint.plugin"]
+Octoslack = "octoprint_Octoslack"
+
+[project.urls]
+Homepage = "https://github.com/misconfigurations/Octoslack"
+
+[project.optional-dependencies]
+develop = [
+    "go-task-bin",
+]
+
+[project.readme]
+file = "README.md"
+content-type = "text/markdown"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+include = [
+    "octoprint_Octoslack",
+    "octoprint_Octoslack.*",
+]

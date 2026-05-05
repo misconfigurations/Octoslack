@@ -5608,9 +5608,13 @@ class OctoslackPlugin(
     def remove_non_ascii(self, input):
         return self.non_ascii_regex.sub(" ", input)
 
-
-__plugin_pythoncompat__ = ">=2.7,<4"
-
+__plugin_name__ = "Octoslack"
+__plugin_version__ = "2.2.1"
+__plugin_description__ = "Slack integration plugin for Octoprint"
+__plugin_author__ = "Šárka Hawke"
+__plugin_url__ = "https://github.com/misconfigurations/Octoslack"
+__plugin_license__ = "MIT"
+__plugin_pythoncompat__ = ">=3.7,<4"
 
 def __plugin_load__():
     global __plugin_implementation__

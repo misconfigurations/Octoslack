@@ -50,7 +50,7 @@ An OctoPrint plugin for monitoring your printer and prints via Slack, Mattermost
 
 # Manual installation steps #
 
-    pip install "https://github.com/fraschetti/Octoslack/archive/master.zip"
+    pip install "https://github.com/misconfigurations/Octoslack/archive/master.zip"
 
 # Slack/Mattermost Examples #
 
