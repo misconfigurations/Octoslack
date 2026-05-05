@@ -739,6 +739,9 @@ class OctoslackPlugin(
     ##def get_template_vars(self):
     ##   	return dict()
 
+    def is_template_autoescaped(self):
+        return True
+
     def get_template_configs(self):
         return [dict(type="settings", custom_bindings=False)]
 
