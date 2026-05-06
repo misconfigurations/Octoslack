@@ -5614,7 +5614,7 @@ class OctoslackPlugin(
 __plugin_name__ = "Octoslack"
 __plugin_version__ = "2.2.1"
 __plugin_description__ = "Slack integration plugin for Octoprint"
-__plugin_author__ = "Šárka Hawke"
+__plugin_author__ = "Chris Fraschetti"
 __plugin_url__ = "https://github.com/misconfigurations/Octoslack"
 __plugin_license__ = "MIT"
 __plugin_pythoncompat__ = ">=3.7,<4"
