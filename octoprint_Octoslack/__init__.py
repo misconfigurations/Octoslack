@@ -746,11 +746,11 @@ class OctoslackPlugin(
                 displayVersion=self._plugin_version,
                 # version check: github repository
                 type="github_release",
-                user="fraschetti",
+                user="misconfigurations",
                 repo="Octoslack",
                 current=self._plugin_version,
                 # update method: pip
-                pip="https://github.com/fraschetti/Octoslack/archive/{target_version}.zip",
+                pip="https://github.com/misconfigurations/Octoslack/archive/{target_version}.zip",
             )
         )
 
