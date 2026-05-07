@@ -4904,11 +4904,6 @@ class OctoslackPlugin(
             error_msgs.append(str(e))
             return local_file_path, error_msgs
 
-        self._logger.debug(
-            "Rename tmp file - Existing tmp filename: " + str(tmp_filename)
-        )
-        return local_file_path, error_msgs
-
     def generate_snapshot_filename(self):
         return "Snapshot_" + str(uuid.uuid1()).replace("-", "") + ".png"
 
