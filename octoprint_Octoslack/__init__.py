@@ -3501,7 +3501,7 @@ class OctoslackPlugin(
                                 snapshot_msg["local_file"],
                                 snapshot_msg["filename"],
                                 snapshot_msg["description"],
-                                channel,
+                                api_rsp.get("channel"),
                                 None,
                             )
 
@@ -4669,6 +4669,12 @@ class OctoslackPlugin(
             error_msgs.append("Slack API connection unavailable")
             return None, error_msgs, None
 
+        channel_ids = [
+            self.resolve_slack_channel_id(slack_client, channel)
+            for channel in channels.split(",")
+            if channel.strip()
+        ]
+
         file_size = os.stat(local_file_path).st_size
 
         self._logger.debug(
@@ -4680,12 +4686,14 @@ class OctoslackPlugin(
             + str(file_size)
             + ", Channels: "
             + str(channels)
+            + ", Channel IDs: "
+            + str(channel_ids)
         )
 
         upload_rsp = None
         with open(local_file_path, "rb") as file_to_upload:
-            upload_rsp = slack_client.files_upload(
-                channels=channels,
+            upload_rsp = slack_client.files_upload_v2(
+                channels=channel_ids,
                 filename=dest_filename,
                 title=file_description,
                 file=file_to_upload,
@@ -4717,6 +4725,19 @@ class OctoslackPlugin(
         )
         download_url = upload_rsp.get("file").get("url_private_download")
         return download_url, error_msgs, upload_rsp
+
+    ##files_upload_v2 only accepts channel IDs, not channel names
+    def resolve_slack_channel_id(self, slack_client, channel_name):
+        name = channel_name.strip().lstrip("#")
+        if re.match(r"^[CGD][A-Z0-9]+$", name):
+            return name
+        for rsp in slack_client.users_conversations(
+            exclude_archived=True, types="public_channel, private_channel"
+        ):
+            for channel in rsp.get("channels", []):
+                if channel.get("name") == name:
+                    return channel.get("id")
+        return name
 
     def retrieve_snapshot_images(self):
         urls = []

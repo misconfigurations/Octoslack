@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "Octoslack"
-version = "2.2.1"
+version = "2.2.2"
 description = "Slack integration plugin for Octoprint"
 authors = [
     { name = "Chris Fraschetti", email = "fraschetti.dev@gmail.com" },
@@ -27,7 +27,7 @@ dependencies = [
     "matrix_client",
     "discord-webhook",
     "pymsteams",
-    "slack_sdk>3.0.0",
+    "slack_sdk>=3.35.0",
     "minio",
     "Pillow",
     "humanize",
