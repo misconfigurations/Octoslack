@@ -21,6 +21,7 @@ An OctoPrint plugin for monitoring your printer and prints via Slack, Mattermost
  - Optional upload of rendered timelapse video to configured hosting service
      - Currently excludes Imgur, Pushover, Rocket.Chat, Discord, & Matrix
  - Support for additional snapshot images from IP cameras
+ - Support for optional pre and post snapshot commands (e.g. to control camera LEDs)
  
  # Supported Events #
  - Print started

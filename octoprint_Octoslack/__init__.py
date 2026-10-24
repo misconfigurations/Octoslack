@@ -6,6 +6,7 @@ import os.path
 import queue
 import re
 import socket
+import subprocess
 import threading
 import time
 import urllib.parse
@@ -135,6 +136,8 @@ class OctoslackPlugin(
             },
             "additional_snapshot_urls": "",
             "snapshot_arrangement": "HORIZONTAL",  ##HORIZTONAL or VERTICAL or GRID
+            "pre_snapshot_command": "",
+            "post_snapshot_command": "",
             "time_format": "HUMAN",  ##FUZZY or EXACT or HUMAN
             "supported_events": {
                 ##Not a real event but we'll leverage the same config structure
@@ -677,6 +680,8 @@ class OctoslackPlugin(
                 ["imgur_config", "refresh_token"],
                 ["imgur_config", "album_id"],
                 ["additional_snapshot_urls"],
+                ["pre_snapshot_command"],
+                ["post_snapshot_command"],
             ]
         )
 
@@ -3136,7 +3141,9 @@ class OctoslackPlugin(
                                 self._slack_next_progress_snapshot_time > 0
                                 and now < self._slack_next_progress_snapshot_time
                             ):
+                                ##Throttled snapshot won't be sent, so delete its local temp file
                                 snapshot_msg = None
+                                self.delete_file(hosted_url)
                             else:
                                 if event == "Progress":
                                     self._slack_next_progress_snapshot_time = (
@@ -4115,6 +4122,17 @@ class OctoslackPlugin(
 
     tmp_imgur_client = None
 
+    snapshot_command_lock = threading.Lock()
+
+    ##Runs a user configured shell command before/after a snapshot (e.g. LED on/off)
+    def run_snapshot_hook(self, command):
+        if not command:
+            return
+        try:
+            subprocess.run(command, shell=True, check=True, timeout=COMMAND_EXECUTION_WAIT)
+        except Exception as e:
+            self._logger.error("Snapshot hook failed: " + str(e))
+
     def upload_snapshot(self):
         snapshot_upload_method = self._settings.get(
             ["snapshot_upload_method"], merged=True
@@ -4127,7 +4145,18 @@ class OctoslackPlugin(
 
         connection_method = self.connection_method()
 
-        local_file_path, error_msgs = self.retrieve_snapshot_images()
+        pre = self._settings.get(["pre_snapshot_command"], merged=True)
+        post = self._settings.get(["post_snapshot_command"], merged=True)
+        if not (pre or post):
+            local_file_path, error_msgs = self.retrieve_snapshot_images()
+        else:
+            ##Serialize snapshots so one's post hook can't run during another's capture
+            with self.snapshot_command_lock:
+                self.run_snapshot_hook(pre)
+                try:
+                    local_file_path, error_msgs = self.retrieve_snapshot_images()
+                finally:
+                    self.run_snapshot_hook(post)
         if local_file_path is None:
             return None, error_msgs, None
 

@@ -772,6 +772,18 @@
 		</table>
 		</small>
             </div>
+        <h3>Snapshot hooks</h3>
+        <div class="octoprint_config_row">
+            <small class="muted">Optional shell commands to run before a snapshot is captured and after it is done, e.g. to switch an LED on and off. Each is waited on before continuing, so a delay (e.g. for the camera to adjust) can be added to the pre-snapshot command. Leave blank to disable.</small>
+        </div>
+        <div class="octoprint_config_row">
+            <span class="octoslack_label">Pre-snapshot command</span>
+            <input type="text" class="octoslack_width_auto" size="60" data-bind="value: settings.plugins.Octoslack.pre_snapshot_command">
+        </div>
+        <div class="octoprint_config_row">
+            <span class="octoslack_label">Post-snapshot command</span>
+            <input type="text" class="octoslack_width_auto" size="60" data-bind="value: settings.plugins.Octoslack.post_snapshot_command">
+        </div>
     </div>
     <br/>
     <h2>OctoPrint Events</h2>
